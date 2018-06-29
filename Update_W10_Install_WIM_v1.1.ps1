@@ -77,8 +77,7 @@ Write-Host "-----------------------------------------------"
 
 #Get the location the script is running from
 	Write-Host "Getting Script Dir..."
-	#$scriptFolder = Get-ScriptDirectory
-$scriptFolder = "D:\W10_Servicing"
+	$scriptFolder = Get-ScriptDirectory
 	Write-Host "Script Dir set to: $ScriptFolder"
 
 # Configuring the script to use the Windows ADK 10 version of DISM
@@ -89,10 +88,10 @@ $scriptFolder = "D:\W10_Servicing"
         }
 
 # Pull the ISO and update file for the selected build
-$ISO =              (Get-NewestFile -RootPath "$scriptFolder\_ISOs\$BuildNum").FullName
-$ServicingUpdate =  (Get-NewestFile -RootPath "$scriptFolder\_Updates\$BuildNum\SSU").FullName
-$AdobeFlashUpdate = (Get-NewestFile -RootPath "$scriptFolder\_Updates\$BuildNum\AdobeFlash").FullName
-$MonthlyCU =        (Get-NewestFile -RootPath "$scriptFolder\_Updates\$BuildNum\CU").FullName
+$ISO =              (Get-NewestFile -RootPath "$scriptFolder\ISOs\$BuildNum").FullName
+$ServicingUpdate =  (Get-NewestFile -RootPath "$scriptFolder\Updates\$BuildNum\SSU").FullName
+$AdobeFlashUpdate = (Get-NewestFile -RootPath "$scriptFolder\Updates\$BuildNum\AdobeFlash").FullName
+$MonthlyCU =        (Get-NewestFile -RootPath "$scriptFolder\Updates\$BuildNum\CU").FullName
 
 # Specify out working folders
 $ImageMountFolder     = "$scriptFolder\Mount_Image"
