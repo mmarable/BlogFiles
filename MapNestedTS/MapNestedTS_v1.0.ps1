@@ -1,6 +1,15 @@
 ﻿# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Functions
 
+#----------------------------
+FUNCTION Get-ScriptDirectory
+#----------------------------
+    { 
+    $Invocation = (Get-Variable MyInvocation -Scope 1).Value
+    Split-Path $Invocation.MyCommand.Path
+    } 
+    #end function Get-ScriptDirectory
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 ########################
@@ -10,9 +19,24 @@ $MyVersion = "1.0"
 $MyModule  = "MapNestedTS"
 $SiteCode  = "MM1"
 
+Clear-Host
+
 Write-Host "-----------------------------------------------"
 Write-Host "Starting: $MyModule ver. $MyVersion"
 Write-Host "-----------------------------------------------"
+
+#If we're running from MM1 temporarly set it to C: to allow external path lookups to function properly
+    $ResetLocation = $null
+    If (((Get-Location) -split ":")[0] -eq "$SiteCode")
+        {
+        $ResetLocation = Get-Location
+        Set-Location c:\
+        }
+
+#Get the location the script is running from
+    #Write-Host "Getting Script Dir..."
+    $scriptFolder = Get-ScriptDirectory
+    #Write-Host "Script Dir set to: $ScriptFolder"
 
 #Load the ConfigMgr module
 	Write-Host "Importing ConfigMgr Module..."
@@ -24,11 +48,8 @@ Write-Host "-----------------------------------------------"
 		}
 
 
-#$SrcTSID = (Read-Host "Enter the Task Sequence ID")
+$SrcTSID = (Read-Host "Enter the Task Sequence ID")
 
-
-$SrcTSID = "MM10040C"
-#Set-Location MM1:
 Set-Location $SiteCode`:
 $SrcTSobj = (Get-CMTaskSequence -TaskSequencePackageId $SrcTSID)
 Clear-Host
@@ -79,6 +100,17 @@ FOREACH ($ChildTS in $NestedTSesMain)
                 Write-Host "              Task Sequence ID:   " $ChildTSL3.TsPackageID -ForegroundColor Green
                 }
         }
+    }
+
+
+#Reset our runspace location if we changed it
+If ($ResetLocation)
+    {
+        Set-Location $ResetLocation
+    }
+else 
+    {
+        Set-Location $scriptFolder
     }
 
 Write-Host " "
