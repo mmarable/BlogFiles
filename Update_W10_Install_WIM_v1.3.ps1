@@ -192,7 +192,7 @@ ELSE
 
 # Remove the temporary WIM
     IF (Test-Path -path $TmpImage) {Remove-Item -Path $TmpImage -Force}
-    IF (Test-Path -path $TmpWinREImage) {Remove-Item -Path $TmpImage -Force}
+    IF (Test-Path -path $TmpWinREImage) {Remove-Item -Path $TmpWinREImage -Force}
     
 
 # Mount index 2 of the Windows 10 boot image (boot.wim)
